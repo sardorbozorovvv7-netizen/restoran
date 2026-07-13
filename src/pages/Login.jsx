@@ -7,7 +7,7 @@ const Login = ({ onLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password === 'admin123') {
+    if (password === '5555') {
       onLogin();
     } else {
       setError('Noto\'g\'ri parol. Iltimos, qayta urinib ko\'ring.');
@@ -47,9 +47,11 @@ const Login = ({ onLogin }) => {
             <div style={{ position: 'relative' }}>
               <Lock size={20} style={{ position: 'absolute', top: '50%', left: '1rem', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
               <input 
-                type="password" 
+                type="password"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 className="form-control" 
-                placeholder="Parol"
+                placeholder="Parol (masalan: 5555)"
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); setError(''); }}
                 style={{ paddingLeft: '3rem' }}
