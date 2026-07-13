@@ -8,7 +8,7 @@ const TablesManager = () => {
 
   const fetchTables = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/tables');
+      const res = await fetch('https://restoranback.onrender.com/api/tables');
       const data = await res.json();
       setTables(data);
     } catch (err) {
@@ -25,7 +25,7 @@ const TablesManager = () => {
     if (!newTableNum) return;
 
     try {
-      const res = await fetch('http://localhost:3000/api/tables', {
+      const res = await fetch('https://restoranback.onrender.com/api/tables', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ table_number: parseInt(newTableNum), status: 'available' })

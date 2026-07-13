@@ -11,8 +11,8 @@ const SalaryManager = () => {
   const fetchData = async () => {
     try {
       const [staffRes, paymentsRes] = await Promise.all([
-        fetch('http://localhost:3000/api/staff'),
-        fetch('http://localhost:3000/api/payments')
+        fetch('https://restoranback.onrender.com/api/staff'),
+        fetch('https://restoranback.onrender.com/api/payments')
       ]);
       setStaff(await staffRes.json());
       setPayments(await paymentsRes.json());
@@ -30,7 +30,7 @@ const SalaryManager = () => {
     if (!selectedUser || !amount) return;
 
     try {
-      const res = await fetch('http://localhost:3000/api/pay-salary', {
+      const res = await fetch('https://restoranback.onrender.com/api/pay-salary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: selectedUser.id, amount: parseFloat(amount) })

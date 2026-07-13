@@ -12,7 +12,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/stats');
+        const res = await fetch('https://restoranback.onrender.com/api/stats');
         const data = await res.json();
         setStats(data);
       } catch (err) {

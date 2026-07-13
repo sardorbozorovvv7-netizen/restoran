@@ -4,6 +4,7 @@ import { LayoutDashboard, Users, Utensils, LogOut, Menu, X } from 'lucide-react'
 import TablesManager from './pages/TablesManager';
 import SalaryManager from './pages/SalaryManager';
 import UsersManager from './pages/UsersManager';
+import MenuManager from './pages/MenuManager';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 
@@ -71,6 +72,10 @@ function App() {
                 <Utensils size={20} />
                 Stollar
               </NavLink>
+              <NavLink to="/menu" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                <Utensils size={20} />
+                Taomnoma
+              </NavLink>
               <NavLink to="/users" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
                 <Users size={20} />
                 Xodimlar
@@ -98,6 +103,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/tables" element={<TablesManager />} />
+            <Route path="/menu" element={<MenuManager />} />
             <Route path="/users" element={<UsersManager />} />
             <Route path="/salaries" element={<SalaryManager />} />
             <Route path="*" element={<Navigate to="/" replace />} />
