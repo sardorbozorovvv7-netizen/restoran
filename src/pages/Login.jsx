@@ -44,25 +44,46 @@ const Login = ({ onLogin }) => {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <div style={{ position: 'relative' }}>
+            <div style={{ position: 'relative', marginBottom: '1.5rem' }}>
               <Lock size={20} style={{ position: 'absolute', top: '50%', left: '1rem', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
               <input 
                 type="password"
-                inputMode="numeric"
-                pattern="[0-9]*"
                 className="form-control" 
-                placeholder="Parol (masalan: 5555)"
+                placeholder="Parol"
                 value={password}
-                onChange={(e) => { setPassword(e.target.value); setError(''); }}
-                style={{ paddingLeft: '3rem' }}
-                required
-                autoFocus
+                readOnly
+                style={{ paddingLeft: '3rem', textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.25rem' }}
               />
             </div>
-            {error && <p style={{ color: 'var(--danger)', fontSize: '0.875rem', marginTop: '0.5rem', textAlign: 'center' }}>{error}</p>}
+            
+            {/* Custom Numeric Keypad */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', alignItems: 'center' }}>
+              <div className="vk-row">
+                <button type="button" className="vk-key" onClick={() => setPassword(p => p + '1')}>1</button>
+                <button type="button" className="vk-key" onClick={() => setPassword(p => p + '2')}>2</button>
+                <button type="button" className="vk-key" onClick={() => setPassword(p => p + '3')}>3</button>
+              </div>
+              <div className="vk-row">
+                <button type="button" className="vk-key" onClick={() => setPassword(p => p + '4')}>4</button>
+                <button type="button" className="vk-key" onClick={() => setPassword(p => p + '5')}>5</button>
+                <button type="button" className="vk-key" onClick={() => setPassword(p => p + '6')}>6</button>
+              </div>
+              <div className="vk-row">
+                <button type="button" className="vk-key" onClick={() => setPassword(p => p + '7')}>7</button>
+                <button type="button" className="vk-key" onClick={() => setPassword(p => p + '8')}>8</button>
+                <button type="button" className="vk-key" onClick={() => setPassword(p => p + '9')}>9</button>
+              </div>
+              <div className="vk-row">
+                <button type="button" className="vk-key" onClick={() => setPassword('')}>C</button>
+                <button type="button" className="vk-key" onClick={() => setPassword(p => p + '0')}>0</button>
+                <button type="button" className="vk-key backspace" onClick={() => setPassword(p => p.slice(0, -1))}>⌫</button>
+              </div>
+            </div>
+
+            {error && <p style={{ color: 'var(--danger)', fontSize: '0.875rem', marginTop: '1rem', textAlign: 'center' }}>{error}</p>}
           </div>
 
-          <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '2rem' }}>
+          <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1.5rem' }}>
             Kirish
           </button>
         </form>
