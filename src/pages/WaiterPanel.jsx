@@ -83,7 +83,12 @@ const WaiterPanel = () => {
         // Refresh tables to update status
         fetchData();
       } else {
-        const errData = await res.json();
+        let errData;
+        try {
+          errData = await res.json();
+        } catch (e) {
+          errData = { error: 'Server xatoligi (Server hali yangilanmadi yoki xato yuz berdi)' };
+        }
         alert("Xatolik: " + (errData.error || errData.message || "Baza bilan bog'lanishda muammo"));
       }
     } catch (error) {
