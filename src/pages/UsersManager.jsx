@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { UserPlus } from 'lucide-react';
 
-const UsersManager = ({ targetRole }) => {
+const UsersManager = ({ allowedRoles }) => {
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
-    role: targetRole || 'waiter',
+    role: allowedRoles ? allowedRoles[0] : 'waiter',
     salary: ''
   });
 
@@ -15,8 +15,8 @@ const UsersManager = ({ targetRole }) => {
     try {
       const res = await fetch('https://restoranback.onrender.com/api/users');
       const data = await res.json();
-      if (targetRole) {
-        setUsers(data.filter(u => u.role === targetRole));
+      if (allowedRoles) {
+        setUsers(data.filter(u => allowedRoles.includes(u.role)));
       } else {
         setUsers(data);
       }
@@ -27,8 +27,8 @@ const UsersManager = ({ targetRole }) => {
 
   useEffect(() => {
     fetchUsers();
-    setFormData(prev => ({ ...prev, role: targetRole || 'waiter' }));
-  }, [targetRole]);
+    setFormData(prev => ({ ...prev, role: allowedRoles ? allowedRoles[0] : 'waiter' }));
+  }, [allowedRoles]);
 
   const handleAddUser = async (e) => {
     e.preventDefault();
@@ -55,9 +55,21 @@ const UsersManager = ({ targetRole }) => {
   const roleNames = {
     'manager': 'Menejerlar',
     'cashier': 'Kassirlar',
-    'waiter': 'Ofitsiantlar'
+    'waiter': 'Ofitsiantlar',
+    'chef': 'Oshpazlar'
   };
-  const pageTitle = targetRole ? roleNames[targetRole] : 'Xodimlar (Staff)';
+
+  const pageTitle = allowedRoles && allowedRoles.length === 1 
+    ? roleNames[allowedRoles[0]] 
+    : 'Xodimlar (Staff)';
+
+  const roleOptions = {
+    'waiter': 'Ofitsiant (Waiter)',
+    'chef': 'Oshpaz (Chef)',
+    'manager': 'Menejer (Manager)',
+    'cashier': 'Kassir (Cashier)',
+    'superadmin': 'Superadmin'
+  };
 
   return (
     <div>
@@ -130,8 +142,8 @@ const UsersManager = ({ targetRole }) => {
                   required
                 />
               </div>
-              {targetRole ? (
-                <input type="hidden" value={targetRole} />
+              {allowedRoles && allowedRoles.length === 1 ? (
+                <input type="hidden" value={allowedRoles[0]} />
               ) : (
                 <div className="form-group">
                   <label className="form-label">Lavozim</label>
@@ -140,11 +152,9 @@ const UsersManager = ({ targetRole }) => {
                     value={formData.role} 
                     onChange={e => setFormData({...formData, role: e.target.value})}
                   >
-                    <option value="waiter">Ofitsiant (Waiter)</option>
-                    <option value="chef">Oshpaz (Chef)</option>
-                    <option value="manager">Menejer (Manager)</option>
-                    <option value="cashier">Kassir (Cashier)</option>
-                    <option value="superadmin">Superadmin</option>
+                    {(allowedRoles ? allowedRoles : Object.keys(roleOptions)).map(r => (
+                      <option key={r} value={r}>{roleOptions[r]}</option>
+                    ))}
                   </select>
                 </div>
               )}

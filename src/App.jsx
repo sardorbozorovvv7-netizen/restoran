@@ -97,9 +97,9 @@ function App() {
                     <LayoutDashboard size={20} />
                     Statistika
                   </NavLink>
-                  <NavLink to="/cashiers" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                  <NavLink to="/staff" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
                     <Users size={20} />
-                    Kassirlar
+                    Xodimlar
                   </NavLink>
                 </>
               )}
@@ -147,7 +147,7 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/tables" element={<TablesManager />} />
                 <Route path="/menu" element={<MenuManager />} />
-                <Route path="/managers" element={<UsersManager targetRole="manager" />} />
+                <Route path="/managers" element={<UsersManager allowedRoles={['manager']} />} />
                 <Route path="/salaries" element={<SalaryManager />} />
               </>
             )}
@@ -155,14 +155,14 @@ function App() {
             {userRole === 'manager' && (
               <>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/cashiers" element={<UsersManager targetRole="cashier" />} />
+                <Route path="/staff" element={<UsersManager allowedRoles={['waiter', 'cashier', 'chef']} />} />
               </>
             )}
 
             {userRole === 'cashier' && (
               <>
                 <Route path="/" element={<TablesManager />} />
-                <Route path="/waiters" element={<UsersManager targetRole="waiter" />} />
+                <Route path="/waiters" element={<UsersManager allowedRoles={['waiter']} />} />
               </>
             )}
 
