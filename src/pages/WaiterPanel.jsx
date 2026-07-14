@@ -22,21 +22,29 @@ const WaiterPanel = () => {
 
   const fetchData = async () => {
     try {
-      const [tablesRes, categoriesRes, menuRes] = await Promise.all([
+      const [tablesRes, categoriesRes, menuRes, usersRes] = await Promise.all([
         fetch(`${API_URL}/api/tables`),
         fetch(`${API_URL}/api/categories`),
-        fetch(`${API_URL}/api/menu-items`)
+        fetch(`${API_URL}/api/menu-items`),
+        fetch(`${API_URL}/api/users`)
       ]);
-      const [tablesData, categoriesData, menuData] = await Promise.all([
+      const [tablesData, categoriesData, menuData, usersData] = await Promise.all([
         tablesRes.json(),
         categoriesRes.json(),
-        menuRes.json()
+        menuRes.json(),
+        usersRes.json()
       ]);
       
       setTables(tablesData);
       setCategories(categoriesData);
       setMenuItems(menuData.filter(i => i.is_available));
       if (categoriesData.length > 0) setActiveCategory(categoriesData[0].id);
+      
+      // Auto-assign a waiter ID if available
+      if (usersData && usersData.length > 0) {
+        const waiter = usersData.find(u => u.role === 'waiter') || usersData[0];
+        setWaiterId(waiter.id);
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -74,6 +82,9 @@ const WaiterPanel = () => {
         setCurrentOrder(newOrder);
         // Refresh tables to update status
         fetchData();
+      } else {
+        const errData = await res.json();
+        alert("Xatolik: " + (errData.error || errData.message || "Baza bilan bog'lanishda muammo"));
       }
     } catch (error) {
       console.error('Error creating order:', error);
