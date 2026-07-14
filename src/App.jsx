@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink, Navigate } from 'react-router-dom';
-import { LayoutDashboard, Users, Utensils, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Users, Utensils, LogOut, Menu, X, ShoppingBag, Coffee } from 'lucide-react';
 import TablesManager from './pages/TablesManager';
 import SalaryManager from './pages/SalaryManager';
 import UsersManager from './pages/UsersManager';
 import MenuManager from './pages/MenuManager';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
+import WaiterPanel from './pages/WaiterPanel';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -69,8 +70,12 @@ function App() {
                 Dashboard
               </NavLink>
               <NavLink to="/tables" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                <Utensils size={20} />
+                <ShoppingBag size={20} />
                 Stollar
+              </NavLink>
+              <NavLink to="/waiter" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                <Coffee size={20} />
+                Ofitsiant
               </NavLink>
               <NavLink to="/menu" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
                 <Utensils size={20} />
@@ -103,6 +108,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/tables" element={<TablesManager />} />
+            <Route path="/waiter" element={<WaiterPanel />} />
             <Route path="/menu" element={<MenuManager />} />
             <Route path="/users" element={<UsersManager />} />
             <Route path="/salaries" element={<SalaryManager />} />
