@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { UserPlus } from 'lucide-react';
 
-const UsersManager = () => {
+const UsersManager = ({ targetRole }) => {
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
-    role: 'waiter',
+    role: targetRole || 'waiter',
     salary: ''
   });
 
@@ -15,7 +15,11 @@ const UsersManager = () => {
     try {
       const res = await fetch('https://restoranback.onrender.com/api/users');
       const data = await res.json();
-      setUsers(data);
+      if (targetRole) {
+        setUsers(data.filter(u => u.role === targetRole));
+      } else {
+        setUsers(data);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -23,7 +27,8 @@ const UsersManager = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+    setFormData(prev => ({ ...prev, role: targetRole || 'waiter' }));
+  }, [targetRole]);
 
   const handleAddUser = async (e) => {
     e.preventDefault();
@@ -47,12 +52,19 @@ const UsersManager = () => {
     }
   };
 
+  const roleNames = {
+    'manager': 'Menejerlar',
+    'cashier': 'Kassirlar',
+    'waiter': 'Ofitsiantlar'
+  };
+  const pageTitle = targetRole ? roleNames[targetRole] : 'Xodimlar (Staff)';
+
   return (
     <div>
       <div className="page-header">
-        <h2 className="page-title">Xodimlar (Staff)</h2>
+        <h2 className="page-title">{pageTitle}</h2>
         <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
-          <UserPlus size={18} /> Yangi xodim qoshish
+          <UserPlus size={18} /> Yangi qo'shish
         </button>
       </div>
 
@@ -118,20 +130,24 @@ const UsersManager = () => {
                   required
                 />
               </div>
-              <div className="form-group">
-                <label className="form-label">Lavozim</label>
-                <select 
-                  className="form-control" 
-                  value={formData.role} 
-                  onChange={e => setFormData({...formData, role: e.target.value})}
-                >
-                  <option value="waiter">Ofitsiant (Waiter)</option>
-                  <option value="chef">Oshpaz (Chef)</option>
-                  <option value="manager">Menejer (Manager)</option>
-                  <option value="cashier">Kassir (Cashier)</option>
-                  <option value="superadmin">Superadmin</option>
-                </select>
-              </div>
+              {targetRole ? (
+                <input type="hidden" value={targetRole} />
+              ) : (
+                <div className="form-group">
+                  <label className="form-label">Lavozim</label>
+                  <select 
+                    className="form-control" 
+                    value={formData.role} 
+                    onChange={e => setFormData({...formData, role: e.target.value})}
+                  >
+                    <option value="waiter">Ofitsiant (Waiter)</option>
+                    <option value="chef">Oshpaz (Chef)</option>
+                    <option value="manager">Menejer (Manager)</option>
+                    <option value="cashier">Kassir (Cashier)</option>
+                    <option value="superadmin">Superadmin</option>
+                  </select>
+                </div>
+              )}
               <div className="form-group">
                 <label className="form-label">Oylik maosh (so'm)</label>
                 <input 

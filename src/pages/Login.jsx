@@ -8,7 +8,13 @@ const Login = ({ onLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === '5555') {
-      onLogin();
+      onLogin('superadmin');
+    } else if (password === '7777') {
+      onLogin('manager');
+    } else if (password === '8888') {
+      onLogin('cashier');
+    } else if (password === '9999') {
+      onLogin('waiter');
     } else {
       setError('Noto\'g\'ri parol. Iltimos, qayta urinib ko\'ring.');
     }
@@ -39,7 +45,7 @@ const Login = ({ onLogin }) => {
             <Utensils size={32} />
           </div>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Tizimga kirish</h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Superadmin paneliga kirish uchun parolni kiriting</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '0.5rem' }}>O'z sahifangizga kirish uchun parolni kiriting</p>
         </div>
 
         <form onSubmit={handleSubmit}>

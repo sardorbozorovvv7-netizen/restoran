@@ -10,31 +10,31 @@ import Login from './pages/Login';
 import WaiterPanel from './pages/WaiterPanel';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const auth = localStorage.getItem('isAuthenticated');
-    if (auth === 'true') {
-      setIsAuthenticated(true);
+    const role = localStorage.getItem('userRole');
+    if (role) {
+      setUserRole(role);
     }
   }, []);
 
-  const handleLogin = () => {
-    localStorage.setItem('isAuthenticated', 'true');
-    setIsAuthenticated(true);
+  const handleLogin = (role) => {
+    localStorage.setItem('userRole', role);
+    setUserRole(role);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    setIsAuthenticated(false);
+    localStorage.removeItem('userRole');
+    setUserRole(null);
   };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  if (!isAuthenticated) {
+  if (!userRole) {
     return <Login onLogin={handleLogin} />;
   }
 
@@ -65,30 +65,66 @@ function App() {
               RestoAdmin
             </h1>
             <nav style={{ marginTop: '2rem' }}>
-              <NavLink to="/" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>
-                <LayoutDashboard size={20} />
-                Dashboard
-              </NavLink>
-              <NavLink to="/tables" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                <ShoppingBag size={20} />
-                Stollar
-              </NavLink>
-              <NavLink to="/waiter" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                <Coffee size={20} />
-                Ofitsiant
-              </NavLink>
-              <NavLink to="/menu" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                <Utensils size={20} />
-                Taomnoma
-              </NavLink>
-              <NavLink to="/users" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                <Users size={20} />
-                Xodimlar
-              </NavLink>
-              <NavLink to="/salaries" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                <Users size={20} />
-                Xodimlar Maoshi
-              </NavLink>
+              
+              {userRole === 'superadmin' && (
+                <>
+                  <NavLink to="/" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>
+                    <LayoutDashboard size={20} />
+                    Dashboard
+                  </NavLink>
+                  <NavLink to="/tables" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                    <ShoppingBag size={20} />
+                    Stollar
+                  </NavLink>
+                  <NavLink to="/menu" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                    <Utensils size={20} />
+                    Taomnoma
+                  </NavLink>
+                  <NavLink to="/managers" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                    <Users size={20} />
+                    Menejerlar
+                  </NavLink>
+                  <NavLink to="/salaries" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                    <Users size={20} />
+                    Xodimlar Maoshi
+                  </NavLink>
+                </>
+              )}
+
+              {userRole === 'manager' && (
+                <>
+                  <NavLink to="/" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>
+                    <LayoutDashboard size={20} />
+                    Statistika
+                  </NavLink>
+                  <NavLink to="/cashiers" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                    <Users size={20} />
+                    Kassirlar
+                  </NavLink>
+                </>
+              )}
+
+              {userRole === 'cashier' && (
+                <>
+                  <NavLink to="/" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>
+                    <ShoppingBag size={20} />
+                    Stollar
+                  </NavLink>
+                  <NavLink to="/waiters" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                    <Users size={20} />
+                    Ofitsiantlar
+                  </NavLink>
+                </>
+              )}
+
+              {userRole === 'waiter' && (
+                <>
+                  <NavLink to="/" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>
+                    <Coffee size={20} />
+                    Ofitsiant
+                  </NavLink>
+                </>
+              )}
             </nav>
           </div>
           
@@ -106,12 +142,36 @@ function App() {
 
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/tables" element={<TablesManager />} />
-            <Route path="/waiter" element={<WaiterPanel />} />
-            <Route path="/menu" element={<MenuManager />} />
-            <Route path="/users" element={<UsersManager />} />
-            <Route path="/salaries" element={<SalaryManager />} />
+            {userRole === 'superadmin' && (
+              <>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/tables" element={<TablesManager />} />
+                <Route path="/menu" element={<MenuManager />} />
+                <Route path="/managers" element={<UsersManager targetRole="manager" />} />
+                <Route path="/salaries" element={<SalaryManager />} />
+              </>
+            )}
+
+            {userRole === 'manager' && (
+              <>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/cashiers" element={<UsersManager targetRole="cashier" />} />
+              </>
+            )}
+
+            {userRole === 'cashier' && (
+              <>
+                <Route path="/" element={<TablesManager />} />
+                <Route path="/waiters" element={<UsersManager targetRole="waiter" />} />
+              </>
+            )}
+
+            {userRole === 'waiter' && (
+              <>
+                <Route path="/" element={<WaiterPanel />} />
+              </>
+            )}
+
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
