@@ -7,6 +7,7 @@ import UsersManager from './pages/UsersManager';
 import MenuManager from './pages/MenuManager';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
+import ChefPanel from './pages/ChefPanel';
 import WaiterPanel from './pages/WaiterPanel';
 
 function App() {
@@ -74,6 +75,10 @@ function App() {
                 <ShoppingBag size={20} />
                 Stollar
               </NavLink>
+                <NavLink to="/chef" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                  <Utensils size={20} />
+                  Oshpaz
+                </NavLink>
               <NavLink to="/waiter" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
                 <Coffee size={20} />
                 Ofitsiant
@@ -117,7 +122,7 @@ function App() {
             <Route path="/menu" element={<MenuManager />} />
             <Route path="/superadmin-page" element={<UsersManager allowedRoles={['manager']} />} />
             <Route path="/manager-page" element={<UsersManager allowedRoles={['waiter', 'cashier', 'chef']} />} />
-            <Route path="/salaries" element={<SalaryManager />} />
+            <Route path="/chef" element={<ChefPanel />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

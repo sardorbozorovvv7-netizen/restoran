@@ -15,15 +15,10 @@ const WaiterPanel = () => {
   const [waiterId, setWaiterId] = useState(2); // Hardcoded for demo (Ali Valiyev - waiter)
   
   const [loading, setLoading] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [pin, setPin] = useState('');
-  const [pinError, setPinError] = useState('');
 
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchData();
-    }
-  }, [isAuthenticated]);
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -141,41 +136,7 @@ const WaiterPanel = () => {
 
   const filteredItems = menuItems.filter(item => item.category_id === activeCategory);
 
-  const handlePinSubmit = (e) => {
-    e.preventDefault();
-    if (pin === '9999') {
-      setIsAuthenticated(true);
-      setPinError('');
-    } else {
-      setPinError("Noto'g'ri parol!");
-      setPin('');
-    }
-  };
 
-  if (!isAuthenticated) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '80vh' }}>
-        <div className="card" style={{ padding: '3rem', maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-          <Coffee size={48} color="var(--accent)" style={{ marginBottom: '1rem' }} />
-          <h2 style={{ marginBottom: '0.5rem' }}>Ofitsiant Paneli</h2>
-          <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Kirish uchun parolni kiriting</p>
-          <form onSubmit={handlePinSubmit}>
-            <input 
-              type="password" 
-              className="form-control" 
-              placeholder="****"
-              style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.5rem', marginBottom: '1rem' }}
-              value={pin}
-              onChange={e => setPin(e.target.value)}
-              autoFocus
-            />
-            {pinError && <p style={{ color: 'var(--danger)', marginBottom: '1rem' }}>{pinError}</p>}
-            <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>Kirish</button>
-          </form>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div>

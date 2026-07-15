@@ -7,14 +7,14 @@ const Login = ({ onLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password === '5555') {
+    if (password === '1234567') {
       onLogin('superadmin');
-    } else if (password === '7777') {
-      onLogin('manager');
-    } else if (password === '8888') {
-      onLogin('cashier');
     } else if (password === '9999') {
       onLogin('waiter');
+    } else if (password === '1111') {
+      onLogin('chef');
+    } else if (password === '2222') {
+      onLogin('manager');
     } else {
       setError('Noto\'g\'ri parol. Iltimos, qayta urinib ko\'ring.');
     }
